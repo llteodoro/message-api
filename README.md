@@ -26,31 +26,31 @@ Before running the application, ensure you have the following installed to guara
 The local development stack perfectly mirrors production using Docker Compose.
 
 **1. Start the infrastructure:**
-```bash
+ 
 make docker-compose-up
 (Alternatively: docker compose up -d. This spins up the API on localhost:8000).
 
 2. Verify the health endpoint:
 
-```bash
+ 
 curl http://localhost:8000/health
 (Expected: {"status": "healthy", ...}).
 
 3. Run the test suite:
 
-```bash
+ 
 make docker-test
 (Expected: ... 41 passed in 2.04s ✅).
 
 4. View Prometheus-ready metrics:
 
-```bash
+ 
 curl http://localhost:8000/metrics | head
 (Expected: JSON output showing total_requests, successful_requests, etc.).
 
 5. Clean up:
 
-```bash
+ 
 make docker-compose-down
 🏗️ Project Architecture & Components
 The application is structured into three distinct layers, prioritizing the Separation of Concerns to ensure everything is testable, isolated, and easy to debug.
