@@ -32,25 +32,25 @@ make docker-compose-up
 
 2. Verify the health endpoint:
 
-Bash
+```bash
 curl http://localhost:8000/health
 (Expected: {"status": "healthy", ...}).
 
 3. Run the test suite:
 
-Bash
+```bash
 make docker-test
 (Expected: ... 41 passed in 2.04s ✅).
 
 4. View Prometheus-ready metrics:
 
-Bash
+```bash
 curl http://localhost:8000/metrics | head
 (Expected: JSON output showing total_requests, successful_requests, etc.).
 
 5. Clean up:
 
-Bash
+```bash
 make docker-compose-down
 🏗️ Project Architecture & Components
 The application is structured into three distinct layers, prioritizing the Separation of Concerns to ensure everything is testable, isolated, and easy to debug.
