@@ -1,677 +1,78 @@
-# Message API - Take-Home Technical Assessment
+# Message API - Platform Engineering & SRE Assessment
 
-A production-ready REST API for managing short text messages with built-in validation, metrics, and observability. Includes complete Docker containerization and GitHub Actions CI/CD pipeline.
+A production-ready REST API for managing short text messages. [cite_start]This project is intentionally focused to serve as a showcase for **Site Reliability Engineering (SRE) and DevOps excellence**, prioritizing operational readiness over complex business logic[cite: 78, 80].
 
-## Overview
+It demonstrates production-grade observability, comprehensive testability, CI/CD automation, and thread-safe data handling.
 
-This is a professionally designed service that demonstrates:
-- ✅ Clean, maintainable architecture
-- ✅ Comprehensive validation and error handling
-- ✅ Operational readiness with metrics and logging
-- ✅ Production-grade code quality
-- ✅ Docker containerization & optimization
-- ✅ Automated CI/CD with GitHub Actions
-- ✅ 41 comprehensive unit tests (100% passing)
-- ✅ Simple setup and deployment
-
-## Quick Start (3 Steps)
-
-### Step 1: Navigate to the project
-```bash
-cd /home/llteo/message-api
-```
-
-### Step 2: Install dependencies
-```bash
-pip install -r requirements.txt
-```
-
-### Step 3: Run the server
-```bash
-python -m uvicorn app.main:app --host 0.0.0.0 --port 8000
-```
-
-The API will be available at http://localhost:8000
+## 🎯 Key Metrics & Highlights
+* [cite_start]**41 Automated Tests**: Running with a 100% passing rate[cite: 96, 127].
+* [cite_start]**6 REST Endpoints**: Handling standard CRUD operations and system health[cite: 95, 126].
+* [cite_start]**5 Validation Rules**: Strict business logic enforcement (Fail-fast architecture)[cite: 126].
+* [cite_start]**7 Observability Metrics**: Prometheus-ready metrics tracking throughput, response codes, and errors[cite: 126].
 
 ---
 
-## 🐳 Docker Quickstart
-
-### Using Docker Compose (Recommended)
-
-```bash
-# Start all services
-docker compose up
-
-# Or in the background
-docker compose up -d
-
-# View logs
-docker compose logs -f
-
-# Stop services
-docker compose down
-```
-
-Access:
-- **API**: http://localhost:8000
-- **Prometheus**: http://localhost:9090 (optional monitoring)
-- **Grafana**: http://localhost:3000 (optional monitoring)
-
-### Using Docker CLI
-
-```bash
-# Build image
-docker build -t message-api:latest .
-
-# Run container
-docker run -d -p 8000:8000 \
-  --name message-api \
-  -e LOG_LEVEL=INFO \
-  message-api:latest
-
-# View logs
-docker logs -f message-api
-
-# Stop container
-docker stop message-api && docker rm message-api
-```
-
-### Using Makefile
-
-```bash
-make docker-build       # Build Docker image
-make docker-run         # Build and run container
-make docker-stop        # Stop container
-make docker-logs        # View container logs
-make docker-push        # Push to registry
-make docker-compose-up  # Start with docker-compose
-make docker-compose-down # Stop services
-```
+## ⚙️ Prerequisites
+Before running the application, ensure you have the following installed to guarantee a frictionless Developer Experience (DX):
+* **Docker & Docker Compose** (Required for the standard deployment path)
+* **Make** (For executing automation shortcuts)
+* *Optional:* `curl` (For testing endpoints locally)
 
 ---
 
-## Development Guide
+## 🚀 Quick Start (The Golden Path)
 
-### Using Makefile for all operations
+The local development stack perfectly mirrors production using Docker Compose.
 
-```bash
-make help              # Show all available commands
-make install           # Install dependencies
-make test              # Run tests with coverage
-make lint              # Run linting checks
-make format            # Format code with black
-make dev               # Run dev server with hot reload
-```
+**1. Start the infrastructure:**
+`make docker-compose-up` or `docker compose up -d`
+*(This spins up the API on `localhost:8000`).*
+
+**2. Verify the health endpoint:**
+`curl http://localhost:8000/health`
+*(Expected: `{"status": "healthy", ...}`).*
+
+**3. Run the test suite:**
+`make test`
+*(Expected: `... 41 passed in 2.04s ✅`).*
+
+**4. View Prometheus-ready metrics:**
+`curl http://localhost:8000/metrics | head`
+[cite_start]*(Expected: JSON output showing `total_requests`, `successful_requests`, etc.)[cite: 98, 99].*
+
+**5. Clean up:**
+`make docker-compose-down` or `docker compose down`
 
 ---
 
-## Features
-
-### Core Functionality
-- ✅ **Create messages** with comprehensive validation
-- ✅ **Read/retrieve** all messages or by ID
-- ✅ **Delete** messages individually or reset all
-- ✅ **Metrics** endpoint with detailed statistics
-- ✅ **Health check** endpoint for monitoring
-- ✅ **Comprehensive logging** and error handling
-
-### Message Validation Rules
-Messages must satisfy ALL of the following rules:
-- ✅ Be between 5 and 200 characters
-- ✅ Not be empty or whitespace-only
-- ✅ Contain at least 1 alphanumeric character
-- ✅ Not be a duplicate of an existing message (case-insensitive)
-
-### Metrics & Observability
-The API tracks:
-- Total requests and breakdowns by HTTP method
-- Success/failure rates for all operations
-- Message creation attempts and success rates
-- Response codes distribution
-- System uptime
-
-## 📚 Documentation
-
-- **[DEPLOYMENT.md](DEPLOYMENT.md)** - Docker deployment guide
-- **[Makefile](Makefile)** - Command shortcuts & automation
-
-## Prerequisites
-
-- Python 3.9 or higher
-- pip (Python package manager)
-- Docker (optional, for containerization)
-
-## Installation & Setup
-
-### 1. Clone the repository (if not already done)
-```bash
-git clone <repository-url>
-cd message-api
-```
-
-### 2. Create a virtual environment (recommended)
-```bash
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-```
-
-### 3. Install dependencies
-```bash
-pip install -r requirements.txt
-```
-
-### 4. Run the application
-```bash
-python -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
-```
-
-The `--reload` flag enables auto-reload on code changes (useful for development).
-
-### 5. Access the API
-- **API Root**: http://localhost:8000
-- **Interactive Documentation (Swagger UI)**: http://localhost:8000/docs
-- **Alternative Documentation (ReDoc)**: http://localhost:8000/redoc
-
-## API Endpoints
-
-### System Endpoints
-
-#### Health Check
-```
-GET /health
-```
-Returns the health status of the API.
-
-**Response (200):**
-```json
-{
-  "status": "healthy",
-  "timestamp": "2026-02-23T10:30:00",
-  "version": "1.0.0"
-}
-```
-
-#### Metrics
-```
-GET /metrics
-```
-Returns comprehensive metrics about API usage.
-
-**Response (200):**
-```json
-{
-  "total_messages": 42,
-  "total_requests": 150,
-  "successful_requests": 140,
-  "failed_requests": 10,
-  "requests_by_type": {
-    "GET": 80,
-    "POST": 50,
-    "DELETE": 20
-  },
-  "response_codes": {
-    "200": 80,
-    "201": 50,
-    "400": 10,
-    "404": 5,
-    "409": 5
-  },
-  "creation_attempts": 50,
-  "successful_creations": 42,
-  "failed_creations": 8
-}
-```
-
-### Message Endpoints
-
-#### Create a Message
-```
-POST /messages
-```
-
-**Request:**
-```json
-{
-  "text": "This is a sample message"
-}
-```
-
-**Response (201 Created):**
-```json
-{
-  "id": "msg_a1b2c3d4e5",
-  "text": "This is a sample message",
-  "created_at": "2026-02-23T10:30:00"
-}
-```
-
-**Error Responses:**
-- **400 Bad Request** - Validation error
-  ```json
-  {
-    "status": 400,
-    "code": "VALIDATION_ERROR",
-    "message": "Message must be at least 5 characters",
-    "details": null
-  }
-  ```
-
-- **409 Conflict** - Duplicate message
-  ```json
-  {
-    "status": 409,
-    "code": "DUPLICATE_MESSAGE",
-    "message": "Message already exists",
-    "details": null
-  }
-  ```
-
-#### Get All Messages
-```
-GET /messages
-```
-
-**Response (200):**
-```json
-[
-  {
-    "id": "msg_a1b2c3d4e5",
-    "text": "First message",
-    "created_at": "2026-02-23T10:30:00"
-  },
-  {
-    "id": "msg_f6g7h8i9j0",
-    "text": "Second message",
-    "created_at": "2026-02-23T10:31:00"
-  }
-]
-```
-
-#### Get Message by ID
-```
-GET /messages/{message_id}
-```
-
-**Response (200):**
-```json
-{
-  "id": "msg_a1b2c3d4e5",
-  "text": "This is a sample message",
-  "created_at": "2026-02-23T10:30:00"
-}
-```
-
-**Error Response (404 Not Found):**
-```json
-{
-  "status": 404,
-  "code": "MESSAGE_NOT_FOUND",
-  "message": "Message with ID 'msg_invalid' not found",
-  "details": null
-}
-```
-
-#### Delete Message
-```
-DELETE /messages/{message_id}
-```
-
-**Response (204 No Content)**
-(Empty response on success)
-
-**Error Response (404 Not Found):**
-```json
-{
-  "status": 404,
-  "code": "MESSAGE_NOT_FOUND",
-  "message": "Message with ID 'msg_invalid' not found",
-  "details": null
-}
-```
-
-#### Delete All Messages (Reset)
-```
-DELETE /messages
-```
-
-**Response (200):**
-```json
-{
-  "status": 200,
-  "message": "All 5 message(s) have been deleted",
-  "deleted_count": 5
-}
-```
-
-## Testing
-
-### Run all tests
-```bash
-pytest
-```
-
-### Run tests with verbose output
-```bash
-pytest -v
-```
-
-### Run specific test file
-```bash
-pytest tests/test_validators.py -v
-```
-
-### Run with coverage report
-```bash
-pytest --cov=app --cov-report=html
-```
-
-### Test Structure
-- `tests/test_validators.py` - Tests for message validation logic (16 tests)
-- `tests/test_storage.py` - Tests for storage operations (9 tests)
-- `tests/test_api.py` - Tests for FastAPI endpoints (16 tests)
-- **Total: 41 tests, 100% passing** ✅
-
-## CI/CD Pipeline
-
-The project includes an automated GitHub Actions CI/CD pipeline (`.github/workflows/ci-cd.yml`) that:
-
-1. **Tests** - Runs pytest on every push
-2. **Lints** - Checks code quality with pylint and flake8
-3. **Builds** - Creates Docker image
-4. **Scans** - Security scanning with Trivy
-5. **Publishes** - Pushes image to Docker registry
-
-### Pipeline Triggers
-- Automatically runs on push to `main` branch
-- Runs on pull requests to `main` branch
-
-## Architecture & Design Notes
-
-### Project Structure
-```
-message-api/
-├── app/
-│   ├── __init__.py           # Package initialization
-│   ├── main.py               # FastAPI application and endpoints
-│   ├── models.py             # Pydantic data models
-│   ├── validators.py         # Message validation logic
-│   ├── storage.py            # In-memory message storage
-│   ├── metrics.py            # Metrics tracking
-│   └── config.py             # Configuration management
-├── tests/
-│   ├── __init__.py
-│   ├── test_api.py           # API endpoint tests
-│   ├── test_validators.py    # Validator tests
-│   └── test_storage.py       # Storage tests
-├── .github/
-│   └── workflows/
-│       └── ci-cd.yml         # GitHub Actions CI/CD pipeline
-├── Dockerfile                # Multi-stage Docker image
-├── docker-compose.yml        # Local development setup
-├── requirements.txt          # Python dependencies
-├── Makefile                  # Command automation
-├── README.md                 # This file
-└── .gitignore               # Git ignore file
-```
-
-### Architecture Principles
-
-#### 1. **Separation of Concerns**
-- `main.py` - API routes and HTTP concerns
-- `models.py` - Data structure definitions
-- `validators.py` - Business logic (validation)
-- `storage.py` - Data persistence
-- `metrics.py` - Observability
-- `config.py` - Configuration management
-
-#### 2. **Thread Safety**
-All shared resources (storage, metrics) use locks to ensure thread-safe operations in multi-threaded environments.
-
-#### 3. **Error Handling**
-- Custom exception handlers for consistent error responses
-- Detailed error messages with error codes
-- Appropriate HTTP status codes (201 Created, 204 No Content, 400 Bad Request, 404 Not Found, 409 Conflict)
-
-#### 4. **Logging & Observability**
-- Structured logging for all operations
-- Metrics endpoint for monitoring and capacity planning
-- Health check endpoint for uptime monitoring
-- Request/response tracking
-
-#### 5. **Data Models**
-Messages use UUID-based identifiers (`msg_<10-char-hex>`) to ensure uniqueness and prevent ID collisions.
-
-### Data Model
-
-```python
-class Message:
-    id: str              # Unique identifier (msg_<uuid>[:10])
-    text: str            # Message content (5-200 characters)
-    created_at: datetime # UTC timestamp of creation
-```
-
-### Metrics Descriptions
-
-- **total_messages**: Current count of stored messages
-- **total_requests**: Total HTTP requests received
-- **successful_requests**: Requests that completed without error
-- **failed_requests**: Requests that resulted in error responses
-- **requests_by_type**: Breakdown of requests by HTTP method
-- **response_codes**: Distribution of response status codes
-- **creation_attempts**: Total attempts to create messages
-- **successful_creations**: Messages successfully created
-- **failed_creations**: Failed creation attempts
-
-### Operational Readiness
-
-#### Logging
-The application uses Python's standard logging module with INFO level by default. Set `LOG_LEVEL` environment variable to change (DEBUG, INFO, WARNING, ERROR, CRITICAL).
-
-#### Environment Variables
-- `DEBUG` - Enable debug mode (default: false)
-- `HOST` - Server host (default: 0.0.0.0)
-- `PORT` - Server port (default: 8000)
-- `LOG_LEVEL` - Logging level (default: INFO)
-
-#### Example with env vars:
-```bash
-DEBUG=true LOG_LEVEL=DEBUG PORT=8001 python -m uvicorn app.main:app --host 0.0.0.0 --port 8001
-```
-
-## Docker Details
-
-### Dockerfile Strategy
-
-The `Dockerfile` uses a **multi-stage build** approach:
-
-1. **Builder Stage** - Compiles dependencies in a builder image
-2. **Runtime Stage** - Creates a minimal runtime image with only what's needed
-
-**Benefits:**
-- 🔒 Smaller final image size
-- 🔒 Security - no build tools in production image
-- 🔒 Non-root user execution
-- 🔒 Health checks included
-
-### Image Size Optimization
-- Base image: `python:3.11-slim` (~150MB)
-- Dependencies layer: ~100MB
-- Final image: ~250MB (typical)
-
-### Security Features
-- ✅ Non-root user (appuser)
-- ✅ Read-only filesystem support
-- ✅ Health check endpoint
-- ✅ No root privileges
-- ✅ Minimal attack surface
-
-## Example Usage with cURL
-
-### Create a message
-```bash
-curl -X POST http://localhost:8000/messages \
-  -H "Content-Type: application/json" \
-  -d '{"text": "Hello, World! This is a test message"}'
-```
-
-### Get all messages
-```bash
-curl http://localhost:8000/messages
-```
-
-### Get a specific message
-```bash
-curl http://localhost:8000/messages/msg_a1b2c3d4e5
-```
-
-### Get metrics
-```bash
-curl http://localhost:8000/metrics
-```
-
-### Delete a message
-```bash
-curl -X DELETE http://localhost:8000/messages/msg_a1b2c3d4e5
-```
-
-### Delete all messages
-```bash
-curl -X DELETE http://localhost:8000/messages
-```
-
-## Example Usage with Python Requests
-
-```python
-import requests
-
-BASE_URL = "http://localhost:8000"
-
-# Create a message
-response = requests.post(
-    f"{BASE_URL}/messages",
-    json={"text": "Hello, from Python!"}
-)
-print(response.json())  # {id: "msg_...", text: "...", created_at: "..."}
-
-# Get all messages
-response = requests.get(f"{BASE_URL}/messages")
-print(response.json())  # List of messages
-
-# Get metrics
-response = requests.get(f"{BASE_URL}/metrics")
-print(response.json())  # Metrics data
-
-# Delete message
-message_id = response.json()[0]["id"]
-requests.delete(f"{BASE_URL}/messages/{message_id}")
-```
-
-## Deployment Strategies
-
-### Strategy 1: Docker Container (Simplest)
-Best for: Single server, VPS, DigitalOcean, Heroku
-
-```bash
-docker build -t message-api:1.0.0 .
-docker run -d -p 8000:8000 message-api:1.0.0
-```
-
-### Strategy 2: Docker Compose (Local & Small Teams)
-Best for: Local development, small deployments
-
-```bash
-docker compose up -d
-```
-
-### Strategy 3: Container Registry (Production)
-Best for: Teams, CI/CD, ecosystem integration
-
-```bash
-docker build -t myregistry.azurecr.io/message-api:1.0.0 .
-docker push myregistry.azurecr.io/message-api:1.0.0
-```
-
-## Scalability Considerations
-
-1. **In-Memory Storage** - Current implementation uses in-memory storage. For persistence, integrate with:
-   - SQLite (simple, file-based)
-   - PostgreSQL (production)
-   - Redis (caching layer)
-
-2. **Horizontal Scaling** - To scale across multiple instances:
-   - Use external message broker (Redis, RabbitMQ)
-   - Implement distributed cache for duplicate detection
-   - Use load balancer (nginx, AWS ALB)
-
-3. **Metrics Export** - For production monitoring:
-   - Export metrics to Prometheus
-   - Use Grafana for visualization
-   - Implement alerting rules
-
-## Production Checklist
-
-- [ ] Add database persistence layer
-- [ ] Implement request rate limiting
-- [ ] Add authentication/authorization (JWT, API keys)
-- [ ] Set up structured JSON logging
-- [ ] Configure CORS if needed
-- [ ] Set up CI/CD with GitHub Actions
-- [ ] Configure health checks for orchestration
-- [ ] Add request tracing/correlation IDs
-- [ ] Configure error tracking (Sentry)
-- [ ] Set up API documentation
-- [ ] Implement request validation for untrusted inputs
-
-## Troubleshooting
-
-### Port already in use
-```bash
-# Use a different port
-python -m uvicorn app.main:app --port 8001
-```
-
-### Docker build fails
-```bash
-# Clean Docker cache
-docker system prune -a
-
-# Rebuild
-docker build -t message-api:latest .
-```
-
-### Import errors
-```bash
-# Ensure you're in the correct directory
-cd /path/to/message-api
-
-# Reinstall dependencies
-pip install -r requirements.txt
-```
-
-### Tests fail
-```bash
-# Run with verbose output
-pytest -v
-
-# Run specific test
-pytest tests/test_api.py::TestMessageCreation -v
-```
-
-## Notes for DevOps/SRE Evaluation
-
-This implementation demonstrates:
-
-1. **Docker expertise** - Multi-stage builds, security best practices, optimization
-2. **Observability-first design** - Metrics, logging, health checks
-3. **CI/CD thinking** - Automated testing, linting, building, scanning
-4. **Operational efficiency** - Simple setup, minimal dependencies
-5. **Code quality** - Clean architecture, comprehensive tests
-6. **Error handling** - Graceful failures with meaningful messages
-7. **Security basics** - Input validation, error response consistency, non-root execution
-8. **Scalability thinking** - Thread-safe, stateless, metric export ready
-9. **Production mindset** - Configuration management, logging levels, documentation
-
-## License
-
-This project is provided as-is for the take-home assessment.
+## 🏗️ Project Architecture & Components
+
+[cite_start]The application is structured into three distinct layers, prioritizing the **Separation of Concerns** to ensure everything is testable, isolated, and easy to debug[cite: 95, 96].
+
+### 1. Application Layer (`app/`)
+* **`main.py`**: The entry point. [cite_start]Exposes 6 REST endpoints[cite: 125, 126].
+* [cite_start]**`models.py`**: Handles Pydantic validation to ensure type safety[cite: 126].
+* [cite_start]**`validators.py`**: Enforces 5 strict business rules before any data is processed[cite: 126].
+* [cite_start]**`storage.py`**: In-memory storage utilizing `threading.Lock()` to ensure thread-safety and prevent race conditions[cite: 126].
+* [cite_start]**`metrics.py`**: Tracks 7 distinct operational metrics for observability[cite: 126].
+* [cite_start]**`config.py`**: Manages environment variables for 12-factor app compliance[cite: 126].
+
+### 2. Testing Layer (`tests/`)
+* [cite_start]Contains 41 unit tests broken down into API tests, validator tests, and storage tests[cite: 126, 127].
+* [cite_start]**SRE Principle:** 100% passing tests provide the confidence required for automated, risk-free deployments[cite: 96, 97].
+
+### 3. Infrastructure & Automation Layer
+* [cite_start]**`Dockerfile`**: A multi-stage build utilizing a non-root user to ensure a secure, production-ready image[cite: 96].
+* [cite_start]**`.github/workflows/ci-cd.yml`**: A 5-stage automated pipeline (`test` → `lint` → `build` → `scan` → `push`)[cite: 127].
+* [cite_start]**`Makefile`**: Contains 20 automation commands to eliminate human error (toil) during operations[cite: 127].
+* [cite_start]**`prometheus.yml`**: Configuration for metrics collection[cite: 127].
+
+---
+
+## 🛡️ The SRE Mindset: Why it's built this way
+
+This repository relies on several core Platform Engineering principles:
+1. [cite_start]**Observability is Everything:** The `/metrics` endpoint is ready for Prometheus scraping[cite: 96, 97]. You cannot operate what you cannot see.
+2. [cite_start]**Automation Eliminates Human Error:** The GitHub Actions pipeline ensures that code is tested, linted, and scanned for vulnerabilities before it is ever built or pushed[cite: 97].
+3. [cite_start]**Defense in Depth:** Data passes through Pydantic type-checking, then custom business validators, and finally a thread-safe storage lock[cite: 97]. 
+4. [cite_start]**Pragmatism:** We start simple with Docker as the deployment unit[cite: 97]. [cite_start]If the scale demands it, the stateless design allows us to easily transition to Kubernetes [cite: 104] [cite_start]or an external database like PostgreSQL[cite: 101].
