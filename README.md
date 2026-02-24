@@ -1,4 +1,3 @@
-Markdown
 # Message API - Platform Engineering & SRE Assessment
 
 A production-ready REST API for managing short text messages. This project is intentionally focused to serve as a showcase for **Site Reliability Engineering (SRE) and DevOps excellence**, prioritizing operational readiness over complex business logic.
@@ -6,18 +5,18 @@ A production-ready REST API for managing short text messages. This project is in
 It demonstrates production-grade observability, comprehensive testability, CI/CD automation, and thread-safe data handling.
 
 ## 🎯 Key Metrics & Highlights
-* **41 Automated Tests**: Running with a 100% passing rate.
-* **6 REST Endpoints**: Handling standard CRUD operations and system health.
-* **5 Validation Rules**: Strict business logic enforcement (Fail-fast architecture).
-* **7 Observability Metrics**: Prometheus-ready metrics tracking throughput, response codes, and errors.
+- **41 Automated Tests**: Running with a 100% passing rate.
+- **6 REST Endpoints**: Handling standard CRUD operations and system health.
+- **5 Validation Rules**: Strict business logic enforcement (Fail-fast architecture).
+- **7 Observability Metrics**: Prometheus-ready metrics tracking throughput, response codes, and errors.
 
 ---
 
 ## ⚙️ Prerequisites
 Before running the application, ensure you have the following installed to guarantee a frictionless Developer Experience (DX):
-* **Docker & Docker Compose** (Required for the standard deployment path)
-* **Make** (For executing automation shortcuts)
-* *Optional:* `curl` (For testing endpoints locally)
+- **Docker & Docker Compose** (Required for the standard deployment path)
+- **Make** (For executing automation shortcuts)
+- *Optional:* `curl` (For testing endpoints locally)
 
 ---
 
@@ -26,32 +25,47 @@ Before running the application, ensure you have the following installed to guara
 The local development stack perfectly mirrors production using Docker Compose.
 
 **1. Start the infrastructure:**
- 
+
+```bash
 make docker-compose-up
-(Alternatively: docker compose up -d. This spins up the API on localhost:8000).
+```
+
+(Alternatively):
+
+```bash
+docker compose up -d
+```
 
 2. Verify the health endpoint:
 
- 
+```bash
 curl http://localhost:8000/health
+```
+
 (Expected: {"status": "healthy", ...}).
 
 3. Run the test suite:
 
- 
+```bash
 make docker-test
+```
+
 (Expected: ... 41 passed in 2.04s ✅).
 
 4. View Prometheus-ready metrics:
 
- 
+```bash
 curl http://localhost:8000/metrics | head
+```
+
 (Expected: JSON output showing total_requests, successful_requests, etc.).
 
 5. Clean up:
 
- 
+```bash
 make docker-compose-down
+```
+
 🏗️ Project Architecture & Components
 The application is structured into three distinct layers, prioritizing the Separation of Concerns to ensure everything is testable, isolated, and easy to debug.
 
