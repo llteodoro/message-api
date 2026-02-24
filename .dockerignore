@@ -1,0 +1,59 @@
+# Git files
+.git
+.gitignore
+.gitattributes
+
+# Python cache
+__pycache__
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Virtual environments
+.env
+.env.local
+
+# IDEs
+.vscode
+.idea
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Test coverage
+.coverage
+htmlcov/
+.pytest_cache/
+.tox/
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+
+# CI/CD
+.github
+.gitlab-ci.yml
+
+# Documentation
+docs/
+*.md
+
+# Docker
+.dockerignore
+Dockerfile*
+
+# Node (if any)
+node_modules/
+package-lock.json
+
+# OS
+.DS_Store
+Thumbs.db
